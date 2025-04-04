@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-BLYNK_AUTH = "YOUR_BLYNK_AUTH_TOKEN"  # Replace with your Blynk Auth Token
+BLYNK_AUTH = "Antavq3Iwm_arN_UTXs1s04mpRK4ba8z"  # Replace with your Blynk Auth Token
 BLYNK_URL = f"https://blynk.cloud/external/api/get"
 
 def get_blynk_data(pin):
