@@ -1,1 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ESP32 Sensor Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-white min-h-screen flex flex-col items-center">
 
+  <!-- Fixed Image (Non-overlapping) -->
+  <div class="fixed top-5 left-5 right-5 z-50 border-4 border-cyan-400 rounded-lg">
+    <img src="https://via.placeholder.com/300x100" alt="Header Image" class="w-full rounded-lg"/>
+  </div>
+
+  <!-- Main Content -->
+  <div class="mt-44 space-y-6 w-full max-w-md px-4">
+    <button class="group relative w-full">
+      <div class="absolute -inset-1 rounded-xl bg-gradient-to-r from-teal-500 via-emerald-500 to-green-500 opacity-20 blur-xl transition-all duration-500 group-hover:opacity-50 group-hover:blur-2xl"></div>
+      <div class="relative flex items-center gap-2 rounded-xl border border-slate-800 bg-slate-950 p-1 pr-4">
+        <div class="flex items-center gap-3 rounded-lg bg-slate-900/50 px-3 py-2">
+          <div class="relative">
+            <svg stroke="currentColor" viewBox="0 0 24 24" fill="none" class="relative h-6 w-6 text-teal-500">
+              <path d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1">
+              <span id="battery" class="text-lg font-bold text-white">Loading...</span>
+            </div>
+            <span class="text-[10px] font-medium text-slate-400">Battery Level</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-1.5">
+          <div id="statusDot" class="h-2 w-2 rounded-full bg-gray-500"></div>
+          <span id="statusText" class="text-xs font-semibold text-slate-300">OFFLINE</span>
+        </div>
+      </div>
+    </button>
+
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-slate-900/50 p-4 rounded-xl">
+        <p class="text-xs text-slate-400">Temperature</p>
+        <p id="temperature" class="text-lg font-semibold">Loading...</p>
+        <canvas id="temperatureChart"></canvas>
+      </div>
+      <div class="bg-slate-900/50 p-4 rounded-xl">
+        <p class="text-xs text-slate-400">Humidity</p>
+        <p id="humidity" class="text-lg font-semibold">Loading...</p>
+        <canvas id="humidityChart"></canvas>
+      </div>
+      <div class="bg-slate-900/50 p-4 rounded-xl">
+        <p class="text-xs text-slate-400">Soil Moisture</p>
+        <p id="moisture" class="text-lg font-semibold">Loading...</p>
+        <canvas id="moistureChart"></canvas>
+      </div>
+      <div class="bg-slate-900/50 p-4 rounded-xl">
+        <p class="text-xs text-slate-400">Air Quality</p>
+        <p id="airQuality" class="text-lg font-semibold">Loading...</p>
+        <canvas id="airChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const charts = {};
+    const chartOptions = { scales: { y: { beginAtZero: true, min: 0, max: 100, ticks: { stepSize: 10 } } } };
+    
+    function createChart(id, label, color) {
+      charts[id] = new Chart(document.getElementById(id), {
+        type: 'bar',
+        data: { labels: ["", "", "", "", "", "", "", "", "", ""], datasets: [{ label, data: Array(10).fill(0), backgroundColor: color }] },
+        options: chartOptions
+      });
+    }
+
+    ["temperature", "humidity", "moisture", "airQuality"].forEach(id => {
+      createChart(id + "Chart", id.charAt(0).toUpperCase() + id.slice(1), "#6366f1");
+    });
+
+    async function fetchData() {
+      const response = await fetch("/data");
+      const data = await response.json();
+
+      document.getElementById("temperature").textContent = ${data.temperature}°C;
+      document.getElementById("humidity").textContent = ${data.humidity}%;
+      document.getElementById("moisture").textContent = ${data.moisture}%;
+      document.getElementById("airQuality").textContent = ${data.airQuality} AQI;
+      document.getElementById("battery").textContent = ${data.battery}%;
+
+      const online = data.isOnline;
+      document.getElementById("statusDot").className = online ? "h-2 w-2 rounded-full bg-emerald-500" : "h-2 w-2 rounded-full bg-gray-500";
+      document.getElementById("statusText").textContent = online ? "ONLINE" : "OFFLINE";
+
+      Object.keys(charts).forEach(key => {
+        charts[key].data.datasets[0].data.shift();
+        charts[key].data.datasets[0].data.push(data[key.replace("Chart", "")]);
+        charts[key].update();
+      });
+    }
+
+    setInterval(fetchData, 5000);
+    fetchData();
+  </script>
+
+</body>
+</html>
