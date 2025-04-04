@@ -9,10 +9,7 @@
 </head>
 <body class="bg-slate-950 text-white min-h-screen flex flex-col items-center">
 
-  <!-- Fixed Image (Non-overlapping) -->
-  <div class="fixed top-5 left-5 right-5 z-50 border-4 border-cyan-400 rounded-lg">
-    <img src="https://raw.githubusercontent.com/Asad-rgb/esp32-dashboard/refs/heads/main/ecoinventors.jpg" alt="Header Image" class="w-full rounded-lg"/>
-  </div>
+ 
 
   <!-- Main Content -->
   <div class="mt-44 space-y-6 w-full max-w-md px-4">
@@ -39,23 +36,23 @@
       </div>
     </button>
 
-    <div class="grid grid-cols-2 gap-4">
-      <div class="bg-slate-900/50 p-4 rounded-xl">
+    <div class="grid-cols-2 gap-4">
+      <div class="mt-2 bg-slate-900/50 p-4 rounded-xl">
         <p class="text-xs text-slate-400">Temperature</p>
         <p id="temperature" class="text-lg font-semibold">Loading...</p>
         <canvas id="temperatureChart"></canvas>
       </div>
-      <div class="bg-slate-900/50 p-4 rounded-xl">
+      <div class="mt-2 bg-slate-900/50 p-4 rounded-xl">
         <p class="text-xs text-slate-400">Humidity</p>
         <p id="humidity" class="text-lg font-semibold">Loading...</p>
         <canvas id="humidityChart"></canvas>
       </div>
-      <div class="bg-slate-900/50 p-4 rounded-xl">
+      <div class="mt-2 bg-slate-900/50 p-4 rounded-xl">
         <p class="text-xs text-slate-400">Soil Moisture</p>
         <p id="moisture" class="text-lg font-semibold">Loading...</p>
         <canvas id="moistureChart"></canvas>
       </div>
-      <div class="bg-slate-900/50 p-4 rounded-xl">
+      <div class="mt-2 bg-slate-900/50 p-4 rounded-xl">
         <p class="text-xs text-slate-400">Air Quality</p>
         <p id="airQuality" class="text-lg font-semibold">Loading...</p>
         <canvas id="airChart"></canvas>
@@ -106,3 +103,8 @@
 
 </body>
 </html>
+
+<!-- Fixed Image Section at the Top -->
+<div class="fixed top-2 left-2 right-2 border-2 border-cyan-400 rounded-lg">
+    <img src="https://raw.githubusercontent.com/Asad-rgb/esp32-dashboard/refs/heads/main/ecoinventors.jpg" alt="Image" class="w-full rounded-lg">
+</div>
