@@ -1,0 +1,42 @@
+/* Ensure header image fits properly */
+.header-img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+    padding: 5px;
+}
+
+/* Center the header and avoid overflow */
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* Ensure two cards per row in mobile view */
+@media (max-width: 768px) {
+    .grid-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+        gap: 10px;
+        justify-items: center;
+    }
+}
+
+/* Improve container width and spacing */
+.container {
+    max-width: 380px;
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Fix the battery level card positioning */
+.status-card {
+    width: 100%;
+    text-align: center;
+}
